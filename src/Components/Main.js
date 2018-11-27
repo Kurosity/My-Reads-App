@@ -90,7 +90,7 @@ class Main extends Component{
                 <div>
                     <Shelf books={this.props.books} moveBook={this.props.moveBook} shelfName={'Currently Reading'} selfShelf={'currentlyReading'}/>
                     <Shelf books={this.props.books} moveBook={this.props.moveBook} shelfName={'Want to Read'} selfShelf={'wantToRead'}/>
-                    <Shelf books={this.props.books} moveBook={this.props.movebook} shelfName={'Read'} selfShelf={'read'}/>
+                    <Shelf books={this.props.books} moveBook={this.props.moveBook} shelfName={'Read'} selfShelf={'read'}/>
                 </div>
                 </div>
                 <div className="open-search">
