@@ -1,97 +1,42 @@
 import React, {Component} from 'react'
-import * as BooksAPI from '../BooksAPI'
-import escapeRegExp from 'escape-string-regexp'
 import Books from './Books'
-import {Link} from 'react-router-dom'
+//import * as BooksAPI from '../BooksAPI'
 
-class Search extends Component{
-    state = {
-        query: '',
-        searched: [],
-    }
+class Shelf extends Component{
+   state = {
+       shelfName: '',
+       selShelf: ''
+   }
+   
+   shelfName = this.props.shelfName
+   selShelf = this.props.selfShelf
 
-    /**
-     * Search Query 
-     * Return search results based on search query
-     */
-
-    bookSearch = (query) => {
-        
-        (query === null || query === '' || query === undefined) ?
-            this.setState({
-                searched: []
-            })
-         :
-            BooksAPI.search(query).then((searched) => {
-                if(query === this.state.query){
-                    searched.error ? (
-                        this.setState({
-                            searched: []
-                    })) : (
-                        this.setState({
-                            searched: searched
-                        })
-                    )
-                }
-            })
-        }
-
-    /**
-     * Update Query
-     * Update search results based on modified query
-     */
-
-    updateQuery = (query) => {
-        this.setState({
-            query: query.trim()
-        })
-
-        this.bookSearch(query)
-    }
 
     render(){
+        console.log(this.selShelf)
         return(
-            <div className="search-books">
-                <div className="search-books-bar">
-                    <button><Link to='/' className="close-search">Close</Link></button>
-                    <div className="search-books-input-wrapper">
-                        {/*
-                        NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                        You can find these search terms here:
-                        https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                        However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                        you don't find a specific author or title. Every search is limited by search terms.
-                        */}
-                        <input type="text" 
-                            placeholder="Search by title or author"
-                            value={this.state.query}
-                            onChange={(event) => this.updateQuery(event.target.value)}/>
-                    </div>
-                </div>
-                <div className="search-books-results">
-                    <ol className="books-grid">
-                        {
-                            this.state.searched.map(bSearch => {
-                            let shelf = 'none'
-
-                            this.props.books.map(abook =>(
-                            abook.id === bSearch.id ?
-                                shelf = abook.shelf : ''
-                        ))
-                            return( 
-                                <li key={bSearch.id}>
-                                <Books book={bSearch} moveBook={this.props.moveBook} currShelf={shelf}/>
-                                </li>
-                            )
-                            }                            
-                        )}
-                    </ol>
+            <div className="bookshelf">
+            <h2 className="bookshelf-title">{this.shelfName}</h2>
+                <div className="bookshelf-books">
+                <ol className="books-grid">
+                  {
+                      this.props.books.filter(
+                          book => book.shelf === this.selShelf
+                    ).map(
+                      book => (                  
+                        <li key={book.id}>
+                        <Books book={book} 
+                            moveBook={this.props.moveBook} 
+                            currShelf={book.shelf}/>
+                        </li>
+                      )
+                    )
+                  }
+                </ol>
                 </div>
             </div>
         )
     }
 }
 
-
-export default Search;
+export default Shelf;
